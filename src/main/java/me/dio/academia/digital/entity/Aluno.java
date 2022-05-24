@@ -14,13 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "tb_aluno")
 public class Aluno implements Serializable {
@@ -42,5 +35,60 @@ public class Aluno implements Serializable {
 
   @OneToMany(mappedBy = "aluno", fetch = FetchType.LAZY)
   private List<AvaliacaoFisica> avaliacoes = new ArrayList<>();
+
+  public Aluno() {
+  }
+
+  public Aluno(Long id, String nome, String cpf, String bairro, LocalDate dataDeNascimento) {
+    this.id = id;
+    this.nome = nome;
+    this.cpf = cpf;
+    this.bairro = bairro;
+    this.dataDeNascimento = dataDeNascimento;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getNome() {
+    return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getCpf() {
+    return cpf;
+  }
+
+  public void setCpf(String cpf) {
+    this.cpf = cpf;
+  }
+
+  public String getBairro() {
+    return bairro;
+  }
+
+  public void setBairro(String bairro) {
+    this.bairro = bairro;
+  }
+
+  public LocalDate getDataDeNascimento() {
+    return dataDeNascimento;
+  }
+
+  public void setDataDeNascimento(LocalDate dataDeNascimento) {
+    this.dataDeNascimento = dataDeNascimento;
+  }
+
+  public List<AvaliacaoFisica> getAvaliacoes() {
+    return avaliacoes;
+  }
 
 }

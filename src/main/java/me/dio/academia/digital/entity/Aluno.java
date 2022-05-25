@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,8 +15,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "tb_aluno")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Aluno implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -33,13 +38,23 @@ public class Aluno implements Serializable {
 
   private LocalDate dataDeNascimento;
 
-  @OneToMany(mappedBy = "aluno", fetch = FetchType.LAZY)
+  @OneToMany(
+    mappedBy = "aluno",
+    cascade = CascadeType.REMOVE,
+    fetch = FetchType.LAZY
+  )
+  @JsonIgnore
   private List<AvaliacaoFisica> avaliacoes = new ArrayList<>();
 
-  public Aluno() {
-  }
+  public Aluno() {}
 
-  public Aluno(Long id, String nome, String cpf, String bairro, LocalDate dataDeNascimento) {
+  public Aluno(
+    Long id,
+    String nome,
+    String cpf,
+    String bairro,
+    LocalDate dataDeNascimento
+  ) {
     this.id = id;
     this.nome = nome;
     this.cpf = cpf;
@@ -90,5 +105,4 @@ public class Aluno implements Serializable {
   public List<AvaliacaoFisica> getAvaliacoes() {
     return avaliacoes;
   }
-
 }

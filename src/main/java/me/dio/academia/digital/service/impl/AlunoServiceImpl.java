@@ -2,6 +2,9 @@ package me.dio.academia.digital.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import me.dio.academia.digital.entity.form.AlunoUpdateForm;
 import me.dio.academia.digital.infra.utils.JavaTimeUtils;
 import me.dio.academia.digital.repository.AlunoRepository;
 import me.dio.academia.digital.service.IAlunoService;
+import me.dio.academia.digital.service.exceptions.ResourceNotFoundException;
 
 @Service
 public class AlunoServiceImpl implements IAlunoService {
@@ -33,8 +37,11 @@ public class AlunoServiceImpl implements IAlunoService {
 
   @Override
   public Aluno get(Long id) {
-    // TODO Auto-generated method stub
-    return null;
+    Optional<Aluno> obj = repository.findById(id);
+    Aluno aluno = obj.orElseThrow(
+      () -> new ResourceNotFoundException("Aluno não encotrado!")
+    );
+    return aluno;
   }
 
   @Override
@@ -42,15 +49,25 @@ public class AlunoServiceImpl implements IAlunoService {
     if (dataDeNascimento == null) {
       return repository.findAll();
     } else {
-      LocalDate localDate = LocalDate.parse(dataDeNascimento, JavaTimeUtils.LOCAL_DATE_FORMATTER);
+      LocalDate localDate = LocalDate.parse(
+        dataDeNascimento,
+        JavaTimeUtils.LOCAL_DATE_FORMATTER
+      );
       return repository.findByDataDeNascimento(localDate);
     }
   }
 
   @Override
   public Aluno update(Long id, AlunoUpdateForm formUpdate) {
-    // TODO Auto-generated method stub
-    return null;
+    try {
+      Aluno aluno = repository.getById(id);
+      aluno.setNome(formUpdate.getNome());
+      aluno.setBairro(formUpdate.getBairro());
+      aluno.setDataDeNascimento(formUpdate.getDataDeNascimento());
+      return aluno = repository.save(aluno);
+    } catch (EntityNotFoundException e) {
+      throw new ResourceNotFoundException("Id not found = " + id);
+    }
   }
 
   @Override

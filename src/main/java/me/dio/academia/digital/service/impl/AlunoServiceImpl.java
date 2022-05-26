@@ -39,7 +39,7 @@ public class AlunoServiceImpl implements IAlunoService {
   }
 
   @Override
-  public Aluno get(Long id) {
+  public Aluno findById(Long id) {
     Optional<Aluno> obj = repository.findById(id);
     Aluno aluno = obj.orElseThrow(
       () -> new ResourceNotFoundException("Aluno não encotrado!")

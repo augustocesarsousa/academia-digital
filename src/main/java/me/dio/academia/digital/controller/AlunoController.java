@@ -39,6 +39,12 @@ public class AlunoController {
     return service.getAllAvaliacaoFisicaId(id);
   }
 
+  @GetMapping(value = "/{id}")
+  public ResponseEntity<Aluno> findById(@PathVariable Long id) {
+    Aluno aluno = service.findById(id);
+    return ResponseEntity.ok().body(aluno);
+  }
+
   @GetMapping
   public List<Aluno> getAll(
     @RequestParam(

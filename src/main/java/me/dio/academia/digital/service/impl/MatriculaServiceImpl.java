@@ -3,6 +3,8 @@ package me.dio.academia.digital.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import me.dio.academia.digital.entity.Aluno;
@@ -11,6 +13,8 @@ import me.dio.academia.digital.entity.form.MatriculaForm;
 import me.dio.academia.digital.repository.AlunoRepository;
 import me.dio.academia.digital.repository.MatriculaRepository;
 import me.dio.academia.digital.service.IMatriculaService;
+import me.dio.academia.digital.service.exceptions.DataBaseException;
+import me.dio.academia.digital.service.exceptions.ResourceNotFoundException;
 
 @Service
 public class MatriculaServiceImpl implements IMatriculaService {
@@ -46,5 +50,13 @@ public class MatriculaServiceImpl implements IMatriculaService {
   }
 
   @Override
-  public void delete(Long id) {}
+  public void delete(Long id) {
+    try {
+      matriculaRepository.deleteById(id);
+    } catch (EmptyResultDataAccessException e) {
+      throw new ResourceNotFoundException("Id not found = " + id);
+    } catch (DataIntegrityViolationException e) {
+      throw new DataBaseException("Integrity violation");
+    }
+  }
 }

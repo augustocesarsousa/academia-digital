@@ -1,10 +1,10 @@
 package me.dio.academia.digital.service;
 
+import java.util.List;
+
 import me.dio.academia.digital.entity.AvaliacaoFisica;
 import me.dio.academia.digital.entity.form.AvaliacaoFisicaForm;
 import me.dio.academia.digital.entity.form.AvaliacaoFisicaUpdateForm;
-
-import java.util.List;
 
 public interface IAvaliacaoFisicaService {
   /**
@@ -19,13 +19,13 @@ public interface IAvaliacaoFisicaService {
    * @param id - id da Avaliação Física que será exibida.
    * @return - Avaliação Física de acordo com o Id fornecido.
    */
-  AvaliacaoFisica get(Long id);
+  AvaliacaoFisica findById(Long id);
 
   /**
    * Retorna todas as Avaliações Física que estão no banco de dados.
    * @return - Uma lista com todas as Avaliações Física que estão salvas no DB.
    */
-  List<AvaliacaoFisica> getAll();
+  List<AvaliacaoFisica> findAll();
 
   /**
    * Atualiza a avaliação física.

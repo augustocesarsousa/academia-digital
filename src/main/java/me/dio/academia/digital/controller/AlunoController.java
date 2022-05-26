@@ -46,13 +46,13 @@ public class AlunoController {
   }
 
   @GetMapping
-  public List<Aluno> getAll(
+  public List<Aluno> findAll(
     @RequestParam(
       value = "dataDeNascimento",
       required = false
     ) String dataDeNacimento
   ) {
-    return service.getAll(dataDeNacimento);
+    return service.findAll(dataDeNacimento);
   }
 
   @PutMapping(value = "/{id}")

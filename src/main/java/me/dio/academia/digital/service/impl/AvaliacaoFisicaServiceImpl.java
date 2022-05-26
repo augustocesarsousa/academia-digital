@@ -3,7 +3,11 @@ package me.dio.academia.digital.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import me.dio.academia.digital.entity.AvaliacaoFisica;
@@ -12,6 +16,7 @@ import me.dio.academia.digital.entity.form.AvaliacaoFisicaUpdateForm;
 import me.dio.academia.digital.repository.AlunoRepository;
 import me.dio.academia.digital.repository.AvaliacaoFisicaRepository;
 import me.dio.academia.digital.service.IAvaliacaoFisicaService;
+import me.dio.academia.digital.service.exceptions.DataBaseException;
 import me.dio.academia.digital.service.exceptions.ResourceNotFoundException;
 
 @Service
@@ -48,13 +53,24 @@ public class AvaliacaoFisicaServiceImpl implements IAvaliacaoFisicaService {
 
   @Override
   public AvaliacaoFisica update(Long id, AvaliacaoFisicaUpdateForm formUpdate) {
-    // TODO Auto-generated method stub
-    return null;
+    try {
+      AvaliacaoFisica avaliacaoFisica = repository.getById(id);
+      avaliacaoFisica.setPeso(formUpdate.getPeso());
+      avaliacaoFisica.setAltura(formUpdate.getAltura());
+      return avaliacaoFisica = repository.save(avaliacaoFisica);
+    } catch (EntityNotFoundException e) {
+      throw new ResourceNotFoundException("Id not found = " + id);
+    }
   }
 
   @Override
   public void delete(Long id) {
-    // TODO Auto-generated method stub
-
+    try {
+      repository.deleteById(id);
+    } catch (EmptyResultDataAccessException e) {
+      throw new ResourceNotFoundException("Id not found = " + id);
+    } catch (DataIntegrityViolationException e) {
+      throw new DataBaseException("Integrity violation");
+    }
   }
 }
